@@ -17,14 +17,14 @@ def main():
             transactions.append((
                 tstamp,
                 '{ Type} From { Name}'.format(**line),
-                line[' Gross']
+                line[' Gross'].replace(',', '')
             ))
 
-            if line[' Fee']:
+            if line[' Fee'] != '0.00':
                 transactions.append((
                     tstamp,
                     '{ Type} Fee From { Name}'.format(**line),
-                    line[' Fee']
+                    line[' Fee'].replace(',', '')
                 ))
 
     with open('QuickBooksOutput.csv', 'w') as f:
@@ -33,7 +33,7 @@ def main():
 
         for txn in sorted(transactions, key=lambda l: time.mktime(l[0])):
             writer.writerow({
-                'Date': time.strftime('%m/%d/%Y %H:%M:%S', txn[0]),
+                'Date': time.strftime('%m/%d/%Y', txn[0]),
                 'Description': txn[1],
                 'Amount': txn[2]
             })
