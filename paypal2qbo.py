@@ -16,14 +16,14 @@ def main():
             # This is the "gross" payment
             transactions.append((
                 tstamp,
-                '{ Type} { Name}'.format(**line),
+                '{ Type} From { Name}'.format(**line),
                 line[' Gross']
             ))
 
             if line[' Fee']:
                 transactions.append((
                     tstamp,
-                    '{ Type} { Name} Fee'.format(**line),
+                    '{ Type} Fee From { Name}'.format(**line),
                     line[' Fee']
                 ))
 
@@ -31,7 +31,7 @@ def main():
         writer = csv.DictWriter(f, fieldnames=['Date', 'Description', 'Amount'])
         writer.writeheader()
 
-        for txn in sorted(transactions, key=lambda l: l[0], reverse=True):
+        for txn in sorted(transactions, key=lambda l: time.mktime(l[0])):
             writer.writerow({
                 'Date': time.strftime('%m/%d/%Y %H:%M:%S', txn[0]),
                 'Description': txn[1],
